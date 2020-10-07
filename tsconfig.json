@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2019",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "allowJs": false,
+    "incremental": true,
+    "declaration": true,
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "strictPropertyInitialization": false
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist", "**/*.d.ts", "test", "parse.ts"]
+}

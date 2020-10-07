@@ -1,0 +1,42 @@
+{
+  "name": "sql-autocomplete",
+  "version": "1.0.0",
+  "description": "Autocomplete recommendations for SQL statements",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build --clean && tsc",
+    "test": "npx jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modeldba/sql-autocomplete.git"
+  },
+  "keywords": [
+    "sql",
+    "autocomplete",
+    "database",
+    "postgresql",
+    "mysql",
+    "sqlserver",
+    "oracle",
+    "plpgsql",
+    "plsql",
+    "tsql"
+  ],
+  "author": "modelDBA",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/modeldba/sql-autocomplete/issues"
+  },
+  "homepage": "https://github.com/modeldba/sql-autocomplete#readme",
+  "dependencies": {
+    "antlr4-c3": "^1.1.12",
+    "antlr4ts-sql": "^1.0.1"
+  },
+  "devDependencies": {
+    "jest": "^26.5.2",
+    "ts-jest": "^26.4.1",
+    "typescript": "^3.9.7"
+  }
+}
