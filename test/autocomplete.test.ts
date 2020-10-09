@@ -68,5 +68,24 @@ test('autocomplete detects column location', () => {
   expect(containsOptionType(plpgsqlOptions, AutocompleteOptionType.TABLE)).toBeTruthy();
   expect(containsOptionType(plpgsqlOptions, AutocompleteOptionType.COLUMN)).toBeTruthy();
   expect(allKeywordsBeginWith(plpgsqlOptions, 'c')).toBeTruthy();
-
+});
+  
+test('autocomplete when position is not provided', () => {
+  const sql = 'SELECT * FR';
+  const tsqlOptions = tsqlAutocomplete.autocomplete(sql);
+  expect(containsOptionType(tsqlOptions, AutocompleteOptionType.TABLE)).toBeTruthy();
+  expect(containsOptionType(tsqlOptions, AutocompleteOptionType.COLUMN)).toBeTruthy();
+  expect(allKeywordsBeginWith(tsqlOptions, 'FR')).toBeTruthy();
+  const mysqlOptions = mysqlAutocomplete.autocomplete(sql);
+  expect(containsOptionType(mysqlOptions, AutocompleteOptionType.TABLE)).toBeFalsy();
+  expect(containsOptionType(mysqlOptions, AutocompleteOptionType.COLUMN)).toBeFalsy();
+  expect(allKeywordsBeginWith(mysqlOptions, 'FR')).toBeTruthy();
+  const plsqlOptions = plsqlAutocomplete.autocomplete(sql);
+  expect(containsOptionType(plsqlOptions, AutocompleteOptionType.TABLE)).toBeFalsy();
+  expect(containsOptionType(plsqlOptions, AutocompleteOptionType.COLUMN)).toBeFalsy();
+  expect(allKeywordsBeginWith(plsqlOptions, 'FR')).toBeTruthy();
+  const plpgsqlOptions = plpgsqlAutocomplete.autocomplete(sql);
+  expect(containsOptionType(plpgsqlOptions, AutocompleteOptionType.TABLE)).toBeFalsy();
+  expect(containsOptionType(plpgsqlOptions, AutocompleteOptionType.COLUMN)).toBeFalsy();
+  expect(allKeywordsBeginWith(plpgsqlOptions, 'FR')).toBeTruthy();
 });

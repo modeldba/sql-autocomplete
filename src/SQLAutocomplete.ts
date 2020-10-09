@@ -29,7 +29,7 @@ export class SQLAutocomplete {
     const preferredRuleOptions = [preferredRulesTable, preferredRulesColumn];
     const ignoreTokens = this._getTokensToIgnore();
     core.ignoredTokens = new Set(ignoreTokens);
-    let indexToAutocomplete = sqlScript.length - 1;
+    let indexToAutocomplete = sqlScript.length;
     if (atIndex !== null && atIndex !== undefined) {
       indexToAutocomplete = atIndex;
     }
@@ -146,9 +146,6 @@ export class SQLAutocomplete {
         TSQLGrammar.TSqlParser.RULE_column_elem,
         TSQLGrammar.TSqlParser.RULE_column_alias,
         TSQLGrammar.TSqlParser.RULE_full_column_name,
-        TSQLGrammar.TSqlParser.RULE_full_column_name_list,
-        TSQLGrammar.TSqlParser.RULE_column_name_list,
-        TSQLGrammar.TSqlParser.RULE_column_name_list_with_order,
         TSQLGrammar.TSqlParser.RULE_output_column_name,
         TSQLGrammar.TSqlParser.RULE_column_declaration
       ];
@@ -247,8 +244,8 @@ export class SQLAutocomplete {
   _getTokenString(token: any, fullString: string, offset: number): string {
     if (token !== null && token.type !== Token.EOF) {
       let stop = token.stop;
-      if (offset - 1 < stop) {
-        stop = offset - 1;
+      if (offset < stop) {
+        stop = offset;
       }
       return fullString.substring(token.start, stop + 1);
     }
