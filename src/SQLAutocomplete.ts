@@ -21,7 +21,7 @@ export class SQLAutocomplete {
       // it's not needed and keeping it in may impact which token gets selected for prediction
       sqlScript = sqlScript.substring(0, atIndex);
     }
-    const tokens = this.antlr4tssql.getTokens(sqlScript);
+    const tokens = this._getTokens(sqlScript);
     const parser = this._getParser(tokens);
     const core = new CodeCompletionCore(parser);
     const preferredRulesTable = this._getPreferredRulesForTable();
@@ -92,14 +92,17 @@ export class SQLAutocomplete {
     return autocompleteOptions;
   }
 
+  _getTokens(sqlScript: string): CommonTokenStream {
+    const tokens = this.antlr4tssql.getTokens(sqlScript, []);
+    return tokens;
+  }
+
   _getParser(tokens: CommonTokenStream): Parser {
-    let parser = this.antlr4tssql.getParser(tokens);
-    parser.removeErrorListener(ConsoleErrorListener.INSTANCE);
+    let parser = this.antlr4tssql.getParser(tokens, []);
     parser.interpreter.setPredictionMode(PredictionMode.LL);
     return parser;
   }
 
-  
   _tokenizeWhitespace() {
     if (this.dialect === SQLDialect.TSQL) {
       return false; // TSQL grammar SKIPs whitespace

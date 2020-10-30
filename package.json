@@ -1,6 +1,6 @@
 {
   "name": "sql-autocomplete",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Autocomplete recommendations for SQL statements. Supports PostgreSQL, MySQL, SQL Server and Oracle (PL/SQL) dialects.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,10 +29,10 @@
   "bugs": {
     "url": "https://github.com/modeldba/sql-autocomplete/issues"
   },
-  "homepage": "https://github.com/modeldba/sql-autocomplete#readme",
+  "homepage": "https://modeldba.com/sql-autocomplete",
   "dependencies": {
     "antlr4-c3": "^1.1.12",
-    "antlr4ts-sql": "^1.0.2"
+    "antlr4ts-sql": "^1.0.3"
   },
   "devDependencies": {
     "jest": "^26.5.2",
