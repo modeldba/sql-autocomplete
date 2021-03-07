@@ -1,5 +1,5 @@
 import { SimpleSQLTokenizer } from '../dist/index';
-import { Token } from 'antlr4ts';
+import { Token } from 'antlr4ts-sql';
 
 test('SimpleSQLTokenizer correctly parses SQL queries', () => {
   let sqlString = 'SELECT * FROM table';

@@ -1,18 +1,26 @@
-import { antlr4tsSQL, CommonTokenStream, ConsoleErrorListener, MySQLGrammar, Parser, PLpgSQLGrammar, PlSQLGrammar, SQLDialect, Token, TSQLGrammar } from 'antlr4ts-sql';
+import { antlr4tsSQL, CommonTokenStream, PredictionMode, MySQLGrammar, Parser, PLpgSQLGrammar, PlSQLGrammar, SQLDialect, Token, TSQLGrammar } from 'antlr4ts-sql';
 import { CodeCompletionCore } from "antlr4-c3";
 import { AutocompleteOption } from "./models/AutocompleteOption";
 import { AutocompleteOptionType } from "./models/AutocompleteOptionType";
 import { SimpleSQLTokenizer } from "./models/SimpleSQLTokenizer";
-import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
 
 export class SQLAutocomplete {
 
   dialect: SQLDialect;
   antlr4tssql: antlr4tsSQL;
 
-  constructor(dialect: SQLDialect) {
+  tableNames: string[] = [];
+  columnNames: string[] = [];
+
+  constructor(dialect: SQLDialect, tableNames?: string[], columnNames?: string[]) {
     this.dialect = dialect;
     this.antlr4tssql = new antlr4tsSQL(this.dialect);
+    if (tableNames !== null && tableNames !== undefined) {
+      this.tableNames.push(...tableNames);
+    }
+    if (columnNames !== null && columnNames !== undefined) {
+      this.columnNames.push(...columnNames);
+    }
   }
 
   autocomplete(sqlScript: string, atIndex?: number): AutocompleteOption[] {
@@ -41,7 +49,7 @@ export class SQLAutocomplete {
     }
     const token: any = allTokens.getTokens()[tokenIndex];
     const tokenString = this._getTokenString(token, sqlScript, indexToAutocomplete);
-    tokens.getTokens(); // Needed for CoreCompletionCore to process correctly, see: https://github.com/mike-lischke/antlr4-c3/issues/42
+    tokens.fill(); // Needed for CoreCompletionCore to process correctly, see: https://github.com/mike-lischke/antlr4-c3/issues/42
     const autocompleteOptions: AutocompleteOption[] = [];
     // Depending on the SQL grammar, we may not get both Tables and Column rules,
     // even if both are viable options for autocompletion
@@ -84,12 +92,40 @@ export class SQLAutocomplete {
       }
     } 
     if (isTableCandidatePosition) {
-      autocompleteOptions.unshift(new AutocompleteOption(null, AutocompleteOptionType.TABLE));
+      for (const tableName of this.tableNames) {
+        if (tableName.toUpperCase().startsWith(tokenString.toUpperCase())) {
+          autocompleteOptions.unshift(new AutocompleteOption(tableName, AutocompleteOptionType.TABLE));    
+        }
+      }
+      if (autocompleteOptions.length === 0 || autocompleteOptions[0].optionType !== AutocompleteOptionType.TABLE) {
+        // If none of the table options match, still identify this as a potential table location
+        autocompleteOptions.unshift(new AutocompleteOption(null, AutocompleteOptionType.TABLE));
+      }
     }
     if (isColumnCandidatePosition) {
-      autocompleteOptions.unshift(new AutocompleteOption(null, AutocompleteOptionType.COLUMN));
+      for (const columnName of this.columnNames) {
+        if (columnName.toUpperCase().startsWith(tokenString.toUpperCase())) {
+          autocompleteOptions.unshift(new AutocompleteOption(columnName, AutocompleteOptionType.COLUMN));
+        }
+      }
+      if (autocompleteOptions.length === 0 || autocompleteOptions[0].optionType !== AutocompleteOptionType.COLUMN) {
+        // If none of the column options match, still identify this as a potential column location
+        autocompleteOptions.unshift(new AutocompleteOption(null, AutocompleteOptionType.COLUMN));
+      }
     }
     return autocompleteOptions;
+  }
+
+  setTableNames(tableNames: string[]) {
+    if (tableNames !== null && tableNames !== undefined) {
+      this.tableNames = [...tableNames];
+    }
+  }
+
+  setColumnNames(columnNames: string[]) {
+    if (columnNames !== null && columnNames !== undefined) {
+      this.columnNames = [...columnNames];
+    }
   }
 
   _getTokens(sqlScript: string): CommonTokenStream {
