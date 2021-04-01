@@ -116,13 +116,13 @@ export class SQLAutocomplete {
     return autocompleteOptions;
   }
 
-  setTableNames(tableNames: string[]) {
+  setTableNames(tableNames: string[]): void {
     if (tableNames !== null && tableNames !== undefined) {
       this.tableNames = [...tableNames];
     }
   }
 
-  setColumnNames(columnNames: string[]) {
+  setColumnNames(columnNames: string[]): void {
     if (columnNames !== null && columnNames !== undefined) {
       this.columnNames = [...columnNames];
     }
